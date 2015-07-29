@@ -1,5 +1,15 @@
 apply plugin: 'com.android.application'
-//apply from: 'keystore.gradle'
+apply plugin: 'spoon'
+apply from: 'keystore.gradle'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.stanfy.spoon:spoon-gradle-plugin:1.0.2'
+    }
+}
 
 android {
     compileSdkVersion 22
@@ -32,16 +42,16 @@ android {
 
     signingConfigs {
         stage {
-//            storeFile file('keystore/stage.keystore')
-//            storePassword 'android'
-//            keyAlias 'androiddebugkey'
-//            keyPassword 'android'
+            storeFile file('keystore/stage.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
         }
         production {
-//            storeFile file('keystore/playstore.keystore')
-//            storePassword store_password
-//            keyAlias key_alias
-//            keyPassword key_password
+            storeFile file('keystore/stage.keystore')
+            storePassword store_password
+            keyAlias key_alias
+            keyPassword key_password
         }
     }
 
@@ -71,4 +81,14 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.3.4'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.google.android.gms:play-services:6.5.87'
+    androidTestCompile 'com.squareup.spoon:spoon-client:1.1.10'
+}
+
+afterEvaluate {
+    android.applicationVariants.all { variant ->
+        def name = "spoon${variant.name.capitalize()}Test"
+        if (tasks.findByName(name)) {
+            tasks[name].outputs.upToDateWhen { false }
+        }
+    }
 }
