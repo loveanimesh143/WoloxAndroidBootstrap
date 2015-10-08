@@ -11,6 +11,7 @@ android {
         targetSdkVersion 22
         versionCode 1
         versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     lintOptions {
           checkReleaseBuilds false
@@ -26,7 +27,7 @@ android {
         }
 
         debug {
-            signingConfig null
+//            signingConfig null
         }
     }
 
@@ -47,7 +48,7 @@ android {
 
     productFlavors {
         stage {
-            signingConfig signingConfigs.stage
+//            signingConfig signingConfigs.stage
             applicationId defaultConfig.applicationId + ".stage"
             versionName defaultConfig.versionName + "-stage"
             resValue "string", "app_name", "[Stage] WoloxApp"
@@ -57,6 +58,11 @@ android {
             signingConfig signingConfigs.production
             resValue "string", "app_name", "WoloxApp"
         }
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'LICENSE.txt'
     }
 
 }
@@ -71,4 +77,8 @@ dependencies {
     compile 'com.squareup.picasso:picasso:2.3.4'
     compile 'de.greenrobot:eventbus:2.4.0'
     compile 'com.google.android.gms:play-services:6.5.87'
+
+    androidTestCompile 'com.android.support.test:runner:0.4'
+    androidTestCompile 'com.android.support.test:rules:0.4'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.1'
 }
