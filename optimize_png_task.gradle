@@ -1,0 +1,10 @@
+task optimizePngs(type: Exec) {
+    group = 'Optimizations'
+    description = 'Reduce the PNG size using PNGQuant'
+
+    def absolutePath = file('..') // Get this project's absolute path
+    commandLine "$absolutePath/scripts/optimize_png.sh", "$absolutePath/app/src"
+}
+
+// Forces this task to run on every build
+preBuild.dependsOn optimizePngs

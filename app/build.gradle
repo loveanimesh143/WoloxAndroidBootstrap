@@ -2,6 +2,7 @@ apply from: '../jacoco.gradle'
 apply plugin: 'com.android.application'
 apply from: 'keystore.gradle'
 apply from: '../quality.gradle'
+apply from: '../optimize_png_task.gradle'
 
 android {
     compileSdkVersion 25
@@ -11,10 +12,24 @@ android {
         applicationId "ar.com.wolox.android.example"
         minSdkVersion 16
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 100
+        versionName "1.0.0"
 
         multiDexEnabled true
+
+        // TODO PROBAR ESTO
+        // This configuration will remove assets and strings (even from libraries) that doesn't
+        // match this release config. Specially useful for large libraries (Play Services,
+        // Facebook SDK, etc.)
+        // resConfigs "en", "es"
+        // resConfigs "nodpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"
+
+        // Images optimization
+        aaptOptions {
+            // Disable built-in PNG compression (we'll use the custom task optimizePngs instead)
+            cruncherEnabled = false
+        }
+
     }
 
     signingConfigs {
@@ -36,6 +51,7 @@ android {
         release {
             signingConfig signingConfigs.release
             minifyEnabled true
+            shrinkResources true // requires ProGuard enabled to work properly
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
 
